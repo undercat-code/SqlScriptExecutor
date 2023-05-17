@@ -1,6 +1,6 @@
 ﻿namespace SqlScriptExecutor.Core
 {
-    class SqlFilesSearch
+    public class SqlFilesSearch
     {
         public SqlFilesSearch(string path) => Path = path;
 
