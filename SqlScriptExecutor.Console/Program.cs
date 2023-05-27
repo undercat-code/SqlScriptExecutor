@@ -1,5 +1,8 @@
 ﻿using System;
 using SqlScriptExecutor.Core;
+using System.Data;
+using System.Data.SqlClient;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SqlScriptExecutor.Console 
 {
@@ -7,14 +10,24 @@ namespace SqlScriptExecutor.Console
     {
         static void Main(string[] args)
         {
+
             //testing and display collection result
-            var test = new SqlFileReader("D:\\Учёба\\ITVDN");
-            var result = test.GetSqlScripts();
-            
-            foreach (var file in result)
+            var readingTest = new SqlFileReader("D:\\Учёба\\sql");
+            var scriptsFromFolder = readingTest.GetSqlScripts();
+
+            foreach (var SqlScripts in scriptsFromFolder)
             {
-                System.Console.WriteLine($"{file.Path} \n {file.Text}");
+                var checking = SqlScripts.Scripts;
+                foreach (var script in checking)
+                {
+                    System.Console.WriteLine(script);
+                    System.Console.WriteLine("---------------------------------------------------------");
+                }
             }
+
+            var launcherTest = new Core.SqlScriptExecutor(scriptsFromFolder);
+            launcherTest.GetAndUseScript();
+
         }
     }
 }

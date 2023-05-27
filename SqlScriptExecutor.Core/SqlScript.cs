@@ -10,10 +10,11 @@ namespace SqlScriptExecutor.Core
     {
         public string Path { get; set; }
         public string Text { get; set; }
-        public SqlScript(string path, string text)
+        public List<string> Scripts { get; set; }
+        public SqlScript(string path, List<string> scripts)
         {
             this.Path = path;
-            this.Text = text;
+            this.Scripts = scripts;
         }
 
         
