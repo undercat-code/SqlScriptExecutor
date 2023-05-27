@@ -8,17 +8,14 @@ namespace SqlScriptExecutor.Core
 {
     public class SqlScript
     {
-        private string FilePath;
-        private string FileContent;
-        public SqlScript(string filePath, string fileContent)
+        public string Path { get; set; }
+        public string Text { get; set; }
+        public SqlScript(string path, string text)
         {
-            this.FilePath = filePath;
-            this.FileContent = fileContent;
+            this.Path = path;
+            this.Text = text;
         }
 
-        public void Print()
-        {
-            Console.WriteLine($"{FilePath} \n {FileContent}");
-        }
+        
     }
 }

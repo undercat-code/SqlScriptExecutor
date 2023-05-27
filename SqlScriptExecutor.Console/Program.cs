@@ -8,15 +8,12 @@ namespace SqlScriptExecutor.Console
         static void Main(string[] args)
         {
             //testing and display collection result
-            var test = new SqlFilesSearch("D:\\Учёба\\ITVDN");
-            var searchResult = test.GetAllSqlFiles();
-
-            var collectionTest = new PathAndContentCollection(searchResult);
-            var result = collectionTest.CreatingCollection();
-
+            var test = new SqlFileReader("D:\\Учёба\\ITVDN");
+            var result = test.GetSqlScripts();
+            
             foreach (var file in result)
             {
-                file.Print();
+                System.Console.WriteLine($"{file.Path} \n {file.Text}");
             }
         }
     }
