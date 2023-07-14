@@ -7,6 +7,9 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Reflection.Metadata.Ecma335;
+using Serilog;
+
 
 namespace SqlScriptExecutor.Core
 {
@@ -21,17 +24,28 @@ namespace SqlScriptExecutor.Core
         public void GetAndUseScript()
         {
             //get connection String from config file for DB connection
-            var db = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=newtestdb;Integrated Security=True;Pooling=False";
+            var db = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=testDB;Integrated Security=True;Pooling=False";
             SqlConnection connectToSql = new SqlConnection(db);
             connectToSql.Open();
             if (connectToSql.State == ConnectionState.Open)
             {
+                //taking file of scripts from collection
                 foreach (var item in Collection)
                 {
-                    foreach(var script in item.Scripts)
+                    //taking script from file of scripts
+                    foreach (var sqlScript in item.Scripts)
                     {
-                        var command = new SqlCommand(script, connectToSql);
-                        command.ExecuteNonQuery();
+                        
+                        var command = new SqlCommand(sqlScript, connectToSql);
+                        try
+                        {
+                            command.ExecuteNonQuery();
+                            Log.Information($"DONE");
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error(ex, "DB Script Error:");
+                        }
                     }
                 }
             }
