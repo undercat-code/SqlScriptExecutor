@@ -35,7 +35,7 @@ namespace SqlScriptExecutor.Core
                 //taking file of scripts from collection
                 foreach (var item in Collection)
                 {
-                    var nomberOfScript = 1;
+                    var nomberOfScript = 0;
                     
                     //taking script from file of scripts
                     foreach (var sqlScript in item.Scripts)
@@ -46,17 +46,17 @@ namespace SqlScriptExecutor.Core
                         var command = new SqlCommand(sqlScript, connectToSql);
                         try
                         {
-                            
+                            nomberOfScript++;
                             command.ExecuteNonQuery();
-                                Log.Information($"{directory.Parent}\\{directory.Name} script #{nomberOfScript}: executed successfully");
-
+                            Log.Information($"{directory.Parent}\\{directory.Name} script #{nomberOfScript}: executed successfully");
+                            
                             }
                         catch (Exception ex)
                         {
                             Log.Error(ex, $"Error in {directory.Parent}\\{directory.Name} script #{nomberOfScript}:");
                         }
                         
-                        nomberOfScript++;
+                        
                     }
                 }
                 Log.Information($"SQL Script Executer finished!");
