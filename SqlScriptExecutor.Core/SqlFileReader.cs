@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,7 @@ namespace SqlScriptExecutor.Core
             }
             else
             {
+                Log.Information($"Directory does not exist: {path}");
                 throw new ArgumentException($"Directory does not exist: {path}");
             }
         }
