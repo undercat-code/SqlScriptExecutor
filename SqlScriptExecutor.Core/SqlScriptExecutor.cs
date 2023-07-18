@@ -63,7 +63,8 @@ namespace SqlScriptExecutor.Core
             }
             else
             {
-                throw new ArgumentException("Can't connect to DB");
+                Log.Information($"Can't connect to DB");
+                throw new ArgumentException("Check if the DB exists");
             }
            
         }
