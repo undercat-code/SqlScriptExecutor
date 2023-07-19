@@ -31,6 +31,7 @@ namespace SqlScriptExecutor.Core
             connectToSql.Open();
             if (connectToSql.State == ConnectionState.Open)
             {
+                var folder_path = ConfigurationManager.ConnectionStrings["folderPath"].ConnectionString;
                 Log.Information($"SQL Script Executer started...");
                 //taking file of scripts from collection
                 foreach (var item in Collection)
@@ -42,8 +43,6 @@ namespace SqlScriptExecutor.Core
                     {
                         
                         var directory = new DirectoryInfo(item.Path);
-                        var folder_path = ConfigurationManager.ConnectionStrings["folderPath"].ConnectionString;
-                        
                         var DisplaylogDirectory = directory.FullName.Replace(folder_path, "");
                         
                         var command = new SqlCommand(sqlScript, connectToSql);
