@@ -25,7 +25,7 @@ namespace SqlScriptExecutor.Core
         public void GetAndUseScript()
         {
             //connection String from config file for DB connection
-            var db_connection = ConfigurationManager.ConnectionStrings["db_key"].ConnectionString;
+            var db_connection = ConfigurationManager.ConnectionStrings["dbKey"].ConnectionString;
             
             SqlConnection connectToSql = new SqlConnection(db_connection);
             connectToSql.Open();
@@ -42,18 +42,21 @@ namespace SqlScriptExecutor.Core
                     {
                         
                         var directory = new DirectoryInfo(item.Path);
+                        var folder_path = ConfigurationManager.ConnectionStrings["folderPath"].ConnectionString;
+                        
+                        var DisplaylogDirectory = directory.FullName.Replace(folder_path, "");
                         
                         var command = new SqlCommand(sqlScript, connectToSql);
                         try
-                        {
+                        {   
                             nomberOfScript++;
                             command.ExecuteNonQuery();
-                            Log.Information($"{directory.Parent}\\{directory.Name} script #{nomberOfScript}: executed successfully");
+                            Log.Information($"{DisplaylogDirectory} script #{nomberOfScript}: executed successfully");
                             
                             }
                         catch (Exception ex)
                         {
-                            Log.Error(ex, $"Error in {directory.Parent}\\{directory.Name} script #{nomberOfScript}:");
+                            Log.Error(ex, $"Error in {DisplaylogDirectory} script #{nomberOfScript}:");
                         }
                         
                         

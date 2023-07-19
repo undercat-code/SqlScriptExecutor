@@ -14,8 +14,8 @@ namespace SqlScriptExecutor.Console
         static void Main(string[] args)
         {
             //connection string for log file
-            var log_path_connection = ConfigurationManager.ConnectionStrings["log_path"].ConnectionString;
-            var folder_path_connection = ConfigurationManager.ConnectionStrings["folder_path"].ConnectionString;
+            var log_path_connection = ConfigurationManager.ConnectionStrings["logFilePath"].ConnectionString;
+            var folder_path_connection = ConfigurationManager.ConnectionStrings["folderPath"].ConnectionString;
             
 
 
