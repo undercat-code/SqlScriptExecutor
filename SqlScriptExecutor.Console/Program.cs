@@ -14,21 +14,20 @@ namespace SqlScriptExecutor.Console
         static void Main(string[] args)
         {
             //connection string for log file
-            var log_path_connection = ConfigurationManager.AppSettings.Get("logFilePath");
-            var folder_path_connection = ConfigurationManager.AppSettings.Get("scriptFolderPath");
-
+            var logPathConnection = ConfigurationManager.AppSettings.Get("logFilePath");
+            var folderPathConnection = ConfigurationManager.AppSettings.Get("scriptFolderPath");
 
 
             //serilog setup
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .WriteTo.File(log_path_connection)
+                .WriteTo.File(logPathConnection)
                 .WriteTo.Console()
                 .CreateLogger();
 
 
             //testing and display collection result
-            var readingTest = new SqlFileReader(folder_path_connection);
+            var readingTest = new SqlFileReader(folderPathConnection);
             var scriptsFromFolder = readingTest.GetSqlScripts();
 
             var launcherTest = new Core.SqlScriptExecutor(scriptsFromFolder);

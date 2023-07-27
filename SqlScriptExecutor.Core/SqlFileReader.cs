@@ -54,9 +54,9 @@ namespace SqlScriptExecutor.Core
                 for (int i = listOfScriptsFromFile.Count - 1; i != -1; i--)
                 {
                     //pattern - any letter in string
-                    bool res = Regex.IsMatch(listOfScriptsFromFile[i], @"[a-zA-Z]+");
+                    bool filledString = Regex.IsMatch(listOfScriptsFromFile[i], @"[a-zA-Z]+");
                     
-                    if (res==false)
+                    if (!filledString)
                     {
                         listOfScriptsFromFile.RemoveAt(i);
                     }
