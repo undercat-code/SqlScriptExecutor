@@ -1,6 +1,8 @@
 ﻿using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -15,6 +17,7 @@ namespace SqlScriptExecutor.Core
             if (Directory.Exists(path))
             {
                 this.Path = path;
+                
             }
             else
             {
@@ -23,6 +26,7 @@ namespace SqlScriptExecutor.Core
             }
         }
         public string Path { get; set; }
+        
         
 
 
@@ -33,13 +37,19 @@ namespace SqlScriptExecutor.Core
             var searchingFilesResult = Directory.EnumerateFiles(Path, "*.sql", SearchOption.AllDirectories);
             var collection = new List<SqlScript>();
             
+            
+            
+
+
             var pattern = "go";
             foreach (var file in searchingFilesResult)
             {
                 var fileContent = File.ReadAllText(file);
                 var listOfScriptsFromFile = Regex.Split(fileContent, pattern, RegexOptions.IgnoreCase).ToList();
                 
-                
+                var directory = new DirectoryInfo(file);
+                var displayPath = directory.FullName.Replace(Path, "");
+
                 //searching empty scripts and delete
                 for (int i = listOfScriptsFromFile.Count - 1; i != -1; i--)
                 {
@@ -57,7 +67,7 @@ namespace SqlScriptExecutor.Core
                 //if list is empty it doesn't add in collection
                 if (listOfScriptsFromFile.Count != 0)
                 {
-                    var collectionItem = new SqlScript(file, listOfScriptsFromFile);
+                    var collectionItem = new SqlScript(file, displayPath, listOfScriptsFromFile);
                     collection.Add(collectionItem);
                 }
                 

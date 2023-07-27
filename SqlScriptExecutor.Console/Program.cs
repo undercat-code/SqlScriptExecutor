@@ -14,9 +14,9 @@ namespace SqlScriptExecutor.Console
         static void Main(string[] args)
         {
             //connection string for log file
-            var log_path_connection = ConfigurationManager.ConnectionStrings["logFilePath"].ConnectionString;
-            var folder_path_connection = ConfigurationManager.ConnectionStrings["folderPath"].ConnectionString;
-            
+            var log_path_connection = ConfigurationManager.AppSettings.Get("logFilePath");
+            var folder_path_connection = ConfigurationManager.AppSettings.Get("scriptFolderPath");
+
 
 
             //serilog setup
@@ -32,7 +32,7 @@ namespace SqlScriptExecutor.Console
             var scriptsFromFolder = readingTest.GetSqlScripts();
 
             var launcherTest = new Core.SqlScriptExecutor(scriptsFromFolder);
-            launcherTest.GetAndUseScript();
+            launcherTest.ExecuteScripts();
 
         }
     }

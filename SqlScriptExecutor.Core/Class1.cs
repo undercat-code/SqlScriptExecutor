@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,8 +21,8 @@ namespace SqlScriptExecutor.Core
             this.Collection = collection;
         }
         public List<SqlScript> Collection { get; set; }
-        
-        public void ExecuteScripts()
+
+        public void GetAndUseScript()
         {
             //connection String from config file for DB connection
             var db_connection = ConfigurationManager.AppSettings.Get("dbKey");
@@ -31,28 +31,35 @@ namespace SqlScriptExecutor.Core
             connectToSql.Open();
             if (connectToSql.State == ConnectionState.Open)
             {
+                var folder_path = ConfigurationManager.AppSettings.Get("scriptFoderPath");
                 Log.Information($"SQL Script Executer started...");
                 //taking file of scripts from collection
                 foreach (var item in Collection)
                 {
-                   //taking script from file of scripts
-                    for(var i = 0; i < item.Scripts.Count; i++)
+                    var nomberOfScript = 0;
+
+                    //taking script from file of scripts
+                    foreach (var sqlScript in item.Scripts)
                     {
- 
-                        var command = new SqlCommand(item.Scripts[i], connectToSql);
+
+                        var directory = new DirectoryInfo(item.Path);
+                        var DisplaylogDirectory = directory.FullName.Replace(folder_path, "");
+
+                        var command = new SqlCommand(sqlScript, connectToSql);
                         try
                         {
-                            
+                            nomberOfScript++;
                             command.ExecuteNonQuery();
-                            Log.Information($"{item.DisplayPath} script #{i+1}: executed successfully");
+                            Log.Information($"{DisplaylogDirectory} script #{nomberOfScript}: executed successfully");
 
                         }
                         catch (Exception ex)
                         {
-                            Log.Error(ex, $"Error in {item.DisplayPath} script #{i+1}:");
+                            Log.Error(ex, $"Error in {DisplaylogDirectory} script #{nomberOfScript}:");
                         }
+
+
                     }
-                        
                 }
                 Log.Information($"SQL Script Executer finished!");
             }
@@ -61,8 +68,9 @@ namespace SqlScriptExecutor.Core
                 Log.Information($"Can't connect to DB");
                 throw new ArgumentException("Check if the DB exists");
             }
-           
+
         }
 
     }
 }
+*/
