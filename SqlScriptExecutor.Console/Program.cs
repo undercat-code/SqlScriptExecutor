@@ -5,6 +5,9 @@ using System.Data.SqlClient;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Serilog;
 using System.Configuration;
+using SqlScriptExecutor.DAL.LocalDB;
+
+
 
 
 namespace SqlScriptExecutor.Console 
@@ -16,7 +19,7 @@ namespace SqlScriptExecutor.Console
             //connection string for log file
             var logPathConnection = ConfigurationManager.AppSettings.Get("logFilePath");
             var folderPathConnection = ConfigurationManager.AppSettings.Get("scriptFolderPath");
-
+            
 
             //serilog setup
             Log.Logger = new LoggerConfiguration()
@@ -29,9 +32,10 @@ namespace SqlScriptExecutor.Console
             //testing and display collection result
             var readingTest = new SqlFileReader(folderPathConnection);
             var scriptsFromFolder = readingTest.GetSqlScripts();
+            var QE = new QueryExecutor();
 
             var launcherTest = new Core.SqlScriptExecutor(scriptsFromFolder);
-            launcherTest.ExecuteScripts();
+            launcherTest.ExecuteScripts(QE);
 
         }
     }

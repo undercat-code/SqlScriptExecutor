@@ -10,6 +10,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Reflection.Metadata.Ecma335;
 using Serilog;
 using System.Configuration;
+using System.Data.Common;
 
 
 namespace SqlScriptExecutor.Core
@@ -19,48 +20,39 @@ namespace SqlScriptExecutor.Core
         public SqlScriptExecutor(List<SqlScript> collection)
         {
             this.Collection = collection;
+            
         }
         public List<SqlScript> Collection { get; set; }
         
-        public void ExecuteScripts()
+        
+        public void ExecuteScripts(IQueryExecutor dbConnection)
         {
-            //connection String from config file for DB connection
-            var db_connection = ConfigurationManager.AppSettings.Get("dbKey");
-
-            SqlConnection connectToSql = new SqlConnection(db_connection);
-            connectToSql.Open();
-            if (connectToSql.State == ConnectionState.Open)
-            {
-                Log.Information($"SQL Script Executer started...");
+            Log.Information($"SQL Script Executer started...");
                 //taking file of scripts from collection
-                foreach (var item in Collection)
-                {
-                   //taking script from file of scripts
-                    for(var i = 0; i < item.Scripts.Count; i++)
-                    {
- 
-                        var command = new SqlCommand(item.Scripts[i], connectToSql);
-                        try
-                        {
-                            
-                            command.ExecuteNonQuery();
-                            Log.Information($"{item.DisplayPath} script #{i+1}: executed successfully");
-
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Error(ex, $"Error in {item.DisplayPath} script #{i+1}:");
-                        }
-                    }
-                        
-                }
-                Log.Information($"SQL Script Executer finished!");
-            }
-            else
+            foreach (var item in Collection)
             {
-                Log.Information($"Can't connect to DB");
-                throw new ArgumentException("Check if the DB exists");
+                //taking script from file of scripts
+                for(var i = 0; i < item.Scripts.Count; i++)
+                {
+ 
+                    
+                    try
+                    {
+
+                        dbConnection.Run(item.Scripts[i]);
+                        Log.Information($"{item.DisplayPath} script #{i + 1}: executed successfully");
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, $"Error in {item.DisplayPath} script #{i + 1}:");
+                    }
+
+                }
+                        
             }
+            Log.Information($"SQL Script Executer finished!");
+            
+            
            
         }
 

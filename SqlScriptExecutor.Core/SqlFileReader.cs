@@ -27,20 +27,11 @@ namespace SqlScriptExecutor.Core
         }
         public string Path { get; set; }
         
-        
-
-
-
-
         public List<SqlScript> GetSqlScripts()
         {
             var searchingFilesResult = Directory.EnumerateFiles(Path, "*.sql", SearchOption.AllDirectories);
             var collection = new List<SqlScript>();
             
-            
-            
-
-
             var pattern = "go";
             foreach (var file in searchingFilesResult)
             {

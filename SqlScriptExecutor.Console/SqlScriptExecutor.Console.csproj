@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SqlScriptExecutor.Core\SqlScriptExecutor.Core.csproj" />
+    <ProjectReference Include="..\SqlScriptExecutor.DAL.LocalDB\SqlScriptExecutor.DAL.LocalDB.csproj" />
   </ItemGroup>
 
 </Project>
