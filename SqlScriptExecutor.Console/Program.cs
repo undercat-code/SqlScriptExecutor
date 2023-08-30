@@ -19,7 +19,7 @@ namespace SqlScriptExecutor.Console
             //connection string for log file
             var logPathConnection = ConfigurationManager.AppSettings.Get("logFilePath");
             var folderPathConnection = ConfigurationManager.AppSettings.Get("scriptFolderPath");
-            
+            var dbConnection = ConfigurationManager.AppSettings.Get("dbKey");
 
             //serilog setup
             Log.Logger = new LoggerConfiguration()
@@ -32,10 +32,10 @@ namespace SqlScriptExecutor.Console
             //testing and display collection result
             var readingTest = new SqlFileReader(folderPathConnection);
             var scriptsFromFolder = readingTest.GetSqlScripts();
-            var QE = new QueryExecutor();
+            var QueryExecutor = new QueryExecutor();
 
-            var launcherTest = new Core.SqlScriptExecutor(scriptsFromFolder);
-            launcherTest.ExecuteScripts(QE);
+            var launcherTest = new Core.SqlScriptExecutor(scriptsFromFolder, QueryExecutor);
+            launcherTest.ExecuteScripts(dbConnection);
 
         }
     }

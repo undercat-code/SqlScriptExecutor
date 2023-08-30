@@ -17,15 +17,18 @@ namespace SqlScriptExecutor.Core
 {
     public class SqlScriptExecutor
     {
-        public SqlScriptExecutor(List<SqlScript> collection)
+        public SqlScriptExecutor(List<SqlScript> collection, IQueryExecutor executor)
         {
             this.Collection = collection;
+            this.Executor = executor;
             
         }
         public List<SqlScript> Collection { get; set; }
-        
-        
-        public void ExecuteScripts(IQueryExecutor dbConnection)
+        public IQueryExecutor Executor { get; set; }
+
+
+
+        public void ExecuteScripts(string db)
         {
             Log.Information($"SQL Script Executer started...");
                 //taking file of scripts from collection
@@ -39,7 +42,7 @@ namespace SqlScriptExecutor.Core
                     try
                     {
 
-                        dbConnection.Run(item.Scripts[i]);
+                        Executor.Run(item.Scripts[i], db);
                         Log.Information($"{item.DisplayPath} script #{i + 1}: executed successfully");
                     }
                     catch (Exception ex)

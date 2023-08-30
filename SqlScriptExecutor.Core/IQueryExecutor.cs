@@ -8,6 +8,6 @@ namespace SqlScriptExecutor.Core
 {
     public interface IQueryExecutor
     {
-        void Run(string quarry, string db = "");
+        void Run(string quary, string db = "");
     }
 }

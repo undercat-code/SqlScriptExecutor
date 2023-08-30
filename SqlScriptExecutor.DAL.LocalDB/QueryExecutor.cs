@@ -9,14 +9,13 @@ namespace SqlScriptExecutor.DAL.LocalDB
     public class QueryExecutor : IQueryExecutor
     {
                
-        public void Run(string quarry, string db = "")
+        public void Run(string quary, string db = "")
         {
-            var db_connection = ConfigurationManager.AppSettings.Get("dbKey");
-            var connectToSql = new SqlConnection(db_connection);
+            var connectToSql = new SqlConnection(db);
             connectToSql.Open();
             if (connectToSql.State == ConnectionState.Open)
             {
-                var command = new SqlCommand(quarry, connectToSql);
+                var command = new SqlCommand(quary, connectToSql);
                 command.ExecuteNonQuery();
                 
             }
