@@ -28,7 +28,7 @@ namespace SqlScriptExecutor.Core
 
 
 
-        public void ExecuteScripts(string db)
+        public void ExecuteScripts(string connectionString)
         {
             Log.Information($"SQL Script Executer started...");
                 //taking file of scripts from collection
@@ -42,7 +42,7 @@ namespace SqlScriptExecutor.Core
                     try
                     {
 
-                        Executor.Run(item.Scripts[i], db);
+                        Executor.Run(item.Scripts[i], connectionString);
                         Log.Information($"{item.DisplayPath} script #{i + 1}: executed successfully");
                     }
                     catch (Exception ex)

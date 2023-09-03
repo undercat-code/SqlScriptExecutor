@@ -32,7 +32,7 @@ namespace SqlScriptExecutor.Core
             var searchingFilesResult = Directory.EnumerateFiles(Path, "*.sql", SearchOption.AllDirectories);
             var collection = new List<SqlScript>();
             
-            var pattern = "go";
+            var pattern = @"\bgo\b";
             foreach (var file in searchingFilesResult)
             {
                 var fileContent = File.ReadAllText(file);

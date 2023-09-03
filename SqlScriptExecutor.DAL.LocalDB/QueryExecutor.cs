@@ -9,9 +9,9 @@ namespace SqlScriptExecutor.DAL.LocalDB
     public class QueryExecutor : IQueryExecutor
     {
                
-        public void Run(string quary, string db = "")
+        public void Run(string quary, string connectionString)
         {
-            var connectToSql = new SqlConnection(db);
+            var connectToSql = new SqlConnection(connectionString);
             connectToSql.Open();
             if (connectToSql.State == ConnectionState.Open)
             {
