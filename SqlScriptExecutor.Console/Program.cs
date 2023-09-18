@@ -76,7 +76,7 @@ namespace SqlScriptExecutor.Console
 
                 var emailMessage = new MimeMessage();
                 emailMessage.From.Add(new MailboxAddress("email", emailConfig.Email));
-                emailMessage.To.AddRange(new List<MailboxAddress> { new MailboxAddress("email", "seven.russia@gmail.com") });
+                emailMessage.To.AddRange(new List<MailboxAddress> { new MailboxAddress("email", emailRecipient) });
                 emailMessage.Subject = "Errors from SQL Executor process:";
 
                 var mailText = $"During the script executing the following errors occured:\r\n<table cellspacing=\"2\" border=\"1\" cellpadding=\"5\" width=\"600\">" + "<tr>\r\n    <th>Script Path</th>\r\n    <th>Error</th>\r\n  </tr>\r\n";
