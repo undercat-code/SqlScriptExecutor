@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlScriptExecutor.Core", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlScriptExecutor.Console", "SqlScriptExecutor.Console\SqlScriptExecutor.Console.csproj", "{9EA7219D-8D51-4E33-A8CB-5523C05A6C6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlScriptExecutor.DAL.LocalDB", "SqlScriptExecutor.DAL.LocalDB\SqlScriptExecutor.DAL.LocalDB.csproj", "{908E8C07-F7B9-4FA8-ADDE-842616936EA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlScriptExecutor.DAL.LocalDB", "SqlScriptExecutor.DAL.LocalDB\SqlScriptExecutor.DAL.LocalDB.csproj", "{908E8C07-F7B9-4FA8-ADDE-842616936EA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailService", "EmailService\EmailService.csproj", "{BF808869-CEEB-4E51-B269-3525CD1B164E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{908E8C07-F7B9-4FA8-ADDE-842616936EA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{908E8C07-F7B9-4FA8-ADDE-842616936EA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{908E8C07-F7B9-4FA8-ADDE-842616936EA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF808869-CEEB-4E51-B269-3525CD1B164E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF808869-CEEB-4E51-B269-3525CD1B164E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF808869-CEEB-4E51-B269-3525CD1B164E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF808869-CEEB-4E51-B269-3525CD1B164E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
