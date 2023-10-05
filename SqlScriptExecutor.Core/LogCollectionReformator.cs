@@ -1,42 +1,47 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace EmailService
+namespace SqlScriptExecutor.Core
 {
     public class LogCollectionReformator
     {
-        public List<string> ErrorCollection { get; set; }
-        public LogCollectionReformator(List<string> errorCollection)
+        public List<string> ReformatErrorText(List<string> logCollection)
         {
-            ErrorCollection = errorCollection;
-        }
+            var patternErrorFilter = @"\bError in\b";
+            var ErrorCollection = new List<string>();
 
-        public List<string> ReformatErrorText()
-        {
+            foreach (var log in logCollection)
+            {
+                bool errorFilter = Regex.IsMatch(log, patternErrorFilter);
 
+                if (errorFilter)
+                {
+                    ErrorCollection.Add(log);
+                }
+            }
 
             //Delete Stack Trace from Error text
             var patternDeleteStackTrace = @"   \bat ";
-            var DeletedStackTraceCollection = new List<string>();
+            var deletedStackTraceCollection = new List<string>();
 
             foreach (var error in ErrorCollection)
             {
                 var splitStackTrace = Regex.Split(error, patternDeleteStackTrace);
-                DeletedStackTraceCollection.Add(splitStackTrace[0]);
+                deletedStackTraceCollection.Add(splitStackTrace[0]);
             }
 
             //Final split for Path and Error text
             var patternSplitPathAndErrors = @"\b:";
             var splitedPathAndErrorsCollection = new List<string>();
 
-            foreach (var error in DeletedStackTraceCollection)
+            foreach (var error in deletedStackTraceCollection)
             {
                 var splitPathAndErrors = Regex.Split(error, patternSplitPathAndErrors);
 
 
-                foreach (var error2 in splitPathAndErrors)
+                foreach (var errorText in splitPathAndErrors)
                 {
                     //Remove "Error in" from Path text
-                    var removeErrorIn = error2.Replace("Error in ", "");
+                    var removeErrorIn = errorText.Replace("Error in ", "");
                     splitedPathAndErrorsCollection.Add(removeErrorIn);
 
                 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SqlScriptExecutor.Core
+﻿namespace SqlScriptExecutor.Core
 {
     public class SqlScript
     {
@@ -19,6 +13,6 @@ namespace SqlScriptExecutor.Core
             this.Scripts = scripts;
         }
 
-        
+
     }
 }
