@@ -9,8 +9,7 @@ namespace SqlScriptExecutor.Core
         {
             if (Directory.Exists(path))
             {
-                this.Path = path;
-
+                Path = path;
             }
             else
             {
@@ -24,7 +23,7 @@ namespace SqlScriptExecutor.Core
         {
             var searchingFilesResult = Directory.EnumerateFiles(Path, "*.sql", SearchOption.AllDirectories);
             var collection = new List<SqlScript>();
-
+            
             var pattern = @"\bgo\b";
             foreach (var file in searchingFilesResult)
             {
@@ -44,7 +43,6 @@ namespace SqlScriptExecutor.Core
                     {
                         listOfScriptsFromFile.RemoveAt(i);
                     }
-
                 }
 
 
@@ -54,9 +52,7 @@ namespace SqlScriptExecutor.Core
                     var collectionItem = new SqlScript(file, displayPath, listOfScriptsFromFile);
                     collection.Add(collectionItem);
                 }
-
             }
-
             return collection;
         }
     }

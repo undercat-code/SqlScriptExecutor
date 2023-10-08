@@ -1,4 +1,4 @@
-﻿namespace SqlScriptExecutor.Core
+﻿namespace SqlScriptExecutor.Core.Abstractions
 {
     public interface IMessageSender
     {

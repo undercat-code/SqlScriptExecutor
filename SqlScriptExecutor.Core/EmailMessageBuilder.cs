@@ -10,7 +10,6 @@
                 mailText += $"<tr>\r\n    <th align=\"left\">{errorCollection[i]}</th>\r\n    <th align=\"left\">{errorCollection[i + 1]}</th>\r\n  </tr>\r\n";
             }
             mailText += $"</table>";
-
             return mailText;
         }
 

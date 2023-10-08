@@ -9,5 +9,4 @@ namespace SqlScriptExecutor.EmailSender
         public int port { get; set; }
         public string password { get; set; }
     }
-    
 }

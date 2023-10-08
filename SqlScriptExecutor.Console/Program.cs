@@ -13,53 +13,31 @@ namespace SqlScriptExecutor.Console
     {
         static void Main(string[] args)
         {
-            //connection string for log file
-            NameValueCollection appConfigConnection = (NameValueCollection)ConfigurationManager.GetSection("appConfig");
-            var logPathConnection = appConfigConnection["logFilePath"];
-            var folderPathConnection = appConfigConnection["scriptFolderPath"];
-            var dbConnection = appConfigConnection["dbKey"];
-
-            var logCollection = new List<string>();
-
+            //get app config data
+            var appConfig = (NameValueCollection)ConfigurationManager.GetSection("appConfig");
+            var emailSenderConfig = (NameValueCollection)ConfigurationManager.GetSection("emailSenderConfig");
+            
             //serilog setup
             Log.Logger = new LoggerConfiguration()
-                .WriteTo.File(logPathConnection)
-                .WriteTo.StringList(logCollection, outputTemplate: "{Message} {Exception}")
+                .WriteTo.File(appConfig["logFilePath"])
                 .WriteTo.Console()
                 .CreateLogger();
 
-
-            //testing and display collection result
-            var readingFolder = new SqlFileReader(folderPathConnection);
-            var scriptsFromFolder = readingFolder.GetSqlScripts();
-            var queryExecutor = new QueryExecutor();
-
-
-            //execute scripts to DB
-            var sqlScriptExecute = new Core.SqlScriptExecutor(scriptsFromFolder, queryExecutor);
-            sqlScriptExecute.ExecuteScripts(dbConnection);
-
-            //Get email config
-            NameValueCollection emailSenderConfigConnection = (NameValueCollection)ConfigurationManager.GetSection("emailSenderConfig");
-            var senderEmailLogin = emailSenderConfigConnection["senderEmailLogin"];
-            var senderEmailSMTPServer = emailSenderConfigConnection["senderEmailSMTPServer"];
-            var senderEmailPort = emailSenderConfigConnection["senderEmailPort"];
-            var senderEmailPassword = emailSenderConfigConnection["senderEmailPassword"];
-            var emailRecipient = emailSenderConfigConnection["defaultRecipients"];
-
             var emailConfig = new EmailConfigurator
             {
-                email = senderEmailLogin,
-                smtpServer = senderEmailSMTPServer,
-                port = int.Parse(senderEmailPort),
-                password = senderEmailPassword
+                email = emailSenderConfig["senderEmailLogin"],
+                smtpServer = emailSenderConfig["senderEmailSMTPServer"],
+                port = int.Parse(emailSenderConfig["senderEmailPort"]),
+                password = emailSenderConfig["senderEmailPassword"]
             };
-            //Message sender 
-            var logCollectionReformator = new LogCollectionReformator();
-            var messageText = new EmailMessageBuilder();
-            var emailSender = new SendEmail(emailConfig);
-            var sqlScriptManager = new SqlScriptManager(logCollection, logCollectionReformator, messageText, emailSender, emailRecipient);
-            sqlScriptManager.SendMessage();
+
+            var sqlScriptManager = new SqlScriptManager(
+                new QueryExecutor(),
+                new SendEmail(emailConfig),
+                appConfig["scriptFolderPath"],
+                appConfig["dbKey"],
+                emailSenderConfig["defaultRecipients"]);
+                sqlScriptManager.Run();
 
 
         }

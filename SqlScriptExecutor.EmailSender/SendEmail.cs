@@ -1,5 +1,5 @@
 ﻿using MimeKit;
-using SqlScriptExecutor.Core;
+using SqlScriptExecutor.Core.Abstractions;
 
 namespace SqlScriptExecutor.EmailSender
 {
@@ -14,7 +14,6 @@ namespace SqlScriptExecutor.EmailSender
 
         public void Send(string to, string body, string subject = "")
         {
-
             using var client = new MailKit.Net.Smtp.SmtpClient();
             try
             {
@@ -27,7 +26,6 @@ namespace SqlScriptExecutor.EmailSender
                 client.AuthenticationMechanisms.Remove("XOAUTH2");
                 client.Authenticate(Config.email, Config.password);
                 client.Send(emailMessage);
-
             }
             catch (Exception ex)
             {

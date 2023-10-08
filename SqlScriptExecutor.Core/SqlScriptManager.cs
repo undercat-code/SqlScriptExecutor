@@ -1,35 +1,43 @@
 ﻿using Serilog;
+using SqlScriptExecutor.Core.Abstractions;
 
 namespace SqlScriptExecutor.Core
 {
     public class SqlScriptManager
     {
-        public readonly List<string> LogCollection;
-        public readonly LogCollectionReformator LogCollectionReformator;
-        public readonly EmailMessageBuilder EmailMessageBuilder;
-        public readonly IMessageSender MessageSender;
-        public readonly string EmailRecipient;
+        public IQueryExecutor QueryExecutor { get; set; }
+        public IMessageSender MessageSender { get; set; }
+        public string ScriptFolderPath { get; set; }
+        public string DbKey {get; set;}
+        public string EmailRecipient { get; set; }
 
-
-        public SqlScriptManager(List<string> logCollection, LogCollectionReformator logCollectionReformator, EmailMessageBuilder emailMessageBuilder, IMessageSender messageSender, string emailRecipient)
+        public SqlScriptManager(IQueryExecutor queryExecutor, IMessageSender messageSender, string scriptFolderPath, string dbKey, string emailRecipient)
         {
-            LogCollection = logCollection;
-            LogCollectionReformator = logCollectionReformator;
-            EmailMessageBuilder = emailMessageBuilder;
+            QueryExecutor = queryExecutor;
             MessageSender = messageSender;
+            ScriptFolderPath = scriptFolderPath;
+            DbKey = dbKey;
             EmailRecipient = emailRecipient;
         }
 
-        public void SendMessage()
+        public void Run()
         {
-            var errorList = LogCollectionReformator.ReformatErrorText(LogCollection);
+            //read sql scripts from folder
+            var sqlFileReader = new SqlFileReader(ScriptFolderPath);
+            var sqlScriptCollection = sqlFileReader.GetSqlScripts();
+            //execute sql scripts to DB
+            var sqlScriptExecutor = new SqlScriptExecutor(sqlScriptCollection, QueryExecutor);
+            sqlScriptExecutor.ExecuteScripts(DbKey);
+            
+            //sending error message to recepients email
+            var errorList = sqlScriptExecutor.LogCollection;
 
             if (errorList.Count > 0)
             {
-                var emailBody = EmailMessageBuilder.BuildEmailMessage(errorList);
-                MessageSender.Send(EmailRecipient, emailBody);
+                var emailBody = new EmailMessageBuilder();
+                var bodyText = emailBody.BuildEmailMessage(errorList);
+                MessageSender.Send(EmailRecipient, bodyText);
                 Log.Information($"Scripts Executor got errors in progress, message was sent to recipient");
-
             }
 
         }
