@@ -23,19 +23,24 @@ namespace SqlScriptExecutor.Console
                 .WriteTo.Console()
                 .CreateLogger();
 
+            var sqlExecutorConfig = new SqlExecutorConfigurator
+            {
+                ScriptFolderPath = appConfig["scriptFolderPath"],
+                DbKey = appConfig["dbKey"]
+            };
+
             var emailConfig = new EmailConfigurator
             {
-                email = emailSenderConfig["senderEmailLogin"],
-                smtpServer = emailSenderConfig["senderEmailSMTPServer"],
-                port = int.Parse(emailSenderConfig["senderEmailPort"]),
-                password = emailSenderConfig["senderEmailPassword"]
+                Email = emailSenderConfig["senderEmailLogin"],
+                SmtpServer = emailSenderConfig["senderEmailSMTPServer"],
+                Port = int.Parse(emailSenderConfig["senderEmailPort"]),
+                Password = emailSenderConfig["senderEmailPassword"]
             };
 
             var sqlScriptManager = new SqlScriptManager(
                 new QueryExecutor(),
                 new SendEmail(emailConfig),
-                appConfig["scriptFolderPath"],
-                appConfig["dbKey"],
+                sqlExecutorConfig,
                 emailSenderConfig["defaultRecipients"]);
                 sqlScriptManager.Run();
 

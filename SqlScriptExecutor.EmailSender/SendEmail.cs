@@ -18,13 +18,13 @@ namespace SqlScriptExecutor.EmailSender
             try
             {
                 var emailMessage = new MimeMessage();
-                emailMessage.From.Add(new MailboxAddress("email", Config.email));
+                emailMessage.From.Add(new MailboxAddress("email", Config.Email));
                 emailMessage.To.AddRange(new List<MailboxAddress> { new MailboxAddress("email", to) });
                 emailMessage.Subject = subject;
                 emailMessage.Body = new TextPart("html") { Text = body };
-                client.Connect(Config.smtpServer, Config.port, true);
+                client.Connect(Config.SmtpServer, Config.Port, true);
                 client.AuthenticationMechanisms.Remove("XOAUTH2");
-                client.Authenticate(Config.email, Config.password);
+                client.Authenticate(Config.Email, Config.Password);
                 client.Send(emailMessage);
             }
             catch (Exception ex)
