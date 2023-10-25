@@ -7,25 +7,26 @@ namespace SqlScriptExecutor.Core
     {
         public IQueryExecutor QueryExecutor { get; set; }
         public IMessageSender MessageSender { get; set; }
-        public SqlExecutorConfigurator SqlExecutorConfig { get; set; }
-        public string EmailRecipient { get; set; }
+        public ISqlScriptExecutionConfigurator SqlScriptExecutionConfigurator { get; set; }
 
-        public SqlScriptManager(IQueryExecutor queryExecutor, IMessageSender messageSender, SqlExecutorConfigurator sqlExecutorConfig, string emailRecipient)
+        public SqlScriptManager(
+          IQueryExecutor queryExecutor,
+          IMessageSender messageSender,
+          ISqlScriptExecutionConfigurator sqlScriptExecutionConfigurator)
         {
             QueryExecutor = queryExecutor;
             MessageSender = messageSender;
-            SqlExecutorConfig = sqlExecutorConfig;
-            EmailRecipient = emailRecipient;
+            SqlScriptExecutionConfigurator = sqlScriptExecutionConfigurator;
         }
 
         public void Run()
         {
             //read sql scripts from folder
-            var sqlFileReader = new SqlFileReader(SqlExecutorConfig.ScriptFolderPath);
+            var sqlFileReader = new SqlFileReader(SqlScriptExecutionConfigurator.ScriptFolderPath);
             var sqlScriptCollection = sqlFileReader.GetSqlScripts();
             //execute sql scripts to DB
             var sqlScriptExecutor = new SqlScriptExecutor(sqlScriptCollection, QueryExecutor);
-            sqlScriptExecutor.ExecuteScripts(SqlExecutorConfig.DbKey);
+            sqlScriptExecutor.ExecuteScripts(SqlScriptExecutionConfigurator.ConnectionString);
             
             //sending error message to recepients email
             var errorList = sqlScriptExecutor.LogCollection;
@@ -34,7 +35,7 @@ namespace SqlScriptExecutor.Core
             {
                 var emailMessageBuilder = new EmailMessageBuilder();
                 var bodyText = emailMessageBuilder.Build(errorList);
-                MessageSender.Send(EmailRecipient, bodyText);
+                MessageSender.Send(SqlScriptExecutionConfigurator.DefaultRecipients, bodyText);
                 Log.Information($"Scripts Executor got errors in progress, message was sent to recipient");
             }
 
